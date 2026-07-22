@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An interactive simulation of how echo chambers form in a social network when friendships strengthen or weaken but never break.">
+<title>Polarized by Design — An Explorable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5a45 45 0 010 90Z' fill='%23b8392f'/><path d='M50 5a45 45 0 000 90Z' fill='%232a5a8c'/></svg>">
+<style>
+:root {
+  --bg:        #f4ecd8;
+  --bg-soft:   #eee2c6;
+  --ink:       #1f1d1a;
+  --ink-soft:  #4a463f;
+  --ink-faint: #8a857a;
+  --rule:      #c9bf9f;
+  --F:         #b8392f;
+  --D:         #2a5a8c;
+  --bridge:    #d68b22;
+  --accent:    #6e5b3f;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #f8f0db 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, #e8dbb8 0%, transparent 70%),
+    #f1e8d0;
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============== Lede ============== */
+.lede {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 28px 28px 28px;
+}
+.eyebrow {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+h1 {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 58px;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0 0 26px 0;
+  color: var(--ink);
+}
+.lede p {
+  max-width: 640px;
+  margin: 0 0 14px 0;
+}
+.lede p:last-child {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ============== Viz grid ============== */
+.viz-grid {
+  max-width: 1240px;
+  margin: 12px auto 28px auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 28px;
+  align-items: start;
+}
+.viz-pane { position: relative; min-width: 0; }
+.viz-frame {
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 1.08 / 1;
+  min-height: 480px;
+  position: relative;
+}
+#viz {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.caption {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  max-width: 600px;
+  line-height: 1.45;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  color: var(--ink-soft);
+  align-items: center;
+  margin-top: 12px;
+  letter-spacing: 0.02em;
+}
+.legend .swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.legend .bar {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* ============== Sidebar ============== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.sparkline-wrap, .control-group {
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 14px 16px;
+}
+.sparkline-wrap .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.sparkline-wrap .meta .sym {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.sparkline-wrap .meta .val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+#sparkline {
+  display: block;
+  width: 100%;
+  height: 72px;
+}
+.sparkline-foot {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+.control-group h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.control-group h3 .hint {
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  font-style: italic;
+  font-family: 'EB Garamond', serif;
+  text-transform: none;
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  margin-bottom: 10px;
+}
+.slider-row:last-child { margin-bottom: 0; }
+.slider-row label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  grid-column: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.slider-row .sym {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink);
+}
+.slider-row .value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--ink);
+  grid-column: 2;
+  align-self: baseline;
+}
+.slider-row input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--rule);
+  border-radius: 2px;
+  outline: none;
+  margin: 6px 0 2px 0;
+  cursor: pointer;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  transition: transform 100ms ease;
+  border: 2px solid var(--bg-soft);
+  box-shadow: 0 0 0 1px var(--ink-soft);
+}
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  border: 2px solid var(--bg-soft);
+  box-shadow: 0 0 0 1px var(--ink-soft);
+}
+.slider-row input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.18); }
+.slider-row input[type="range"]:hover::-moz-range-thumb     { transform: scale(1.18); }
+.locked input[type="range"]::-webkit-slider-thumb { background: var(--accent); }
+.locked input[type="range"]::-moz-range-thumb     { background: var(--accent); }
+
+.seg-control {
+  display: flex;
+  gap: 0;
+  margin-top: 10px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.seg-control button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rule);
+  padding: 6px 4px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 100ms, color 100ms;
+}
+.seg-control button:last-child { border-right: none; }
+.seg-control button.active { background: var(--ink); color: var(--bg); }
+.seg-control button:hover:not(.active) { background: rgba(31, 29, 26, 0.06); }
+
+.buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.buttons button {
+  flex: 1;
+  min-width: 70px;
+  background: var(--bg-soft);
+  border: 1px solid var(--ink-soft);
+  padding: 9px 10px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 150ms ease, color 150ms ease;
+}
+.buttons button:hover { background: var(--ink); color: var(--bg); }
+.buttons button.primary { background: var(--ink); color: var(--bg); }
+.buttons button.primary:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
+
+.kbd-hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+.kbd-hint kbd {
+  background: rgba(31,29,26,0.06);
+  border-radius: 2px;
+  padding: 1px 4px;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* ============== Notes ============== */
+.notes {
+  max-width: 760px;
+  margin: 8px auto 36px auto;
+  padding: 0 28px;
+}
+.notes details {
+  border-top: 1px solid var(--rule);
+  padding: 14px 0;
+}
+.notes details:last-child { border-bottom: 1px solid var(--rule); }
+.notes summary {
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  list-style: none;
+  padding-left: 20px;
+  position: relative;
+  user-select: none;
+}
+.notes summary::-webkit-details-marker { display: none; }
+.notes summary::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--accent);
+}
+.notes details[open] summary::before { content: '–'; }
+.notes details > *:not(summary) {
+  margin-left: 20px;
+  max-width: 600px;
+}
+.notes p { margin: 12px 0; }
+.notes em { color: var(--accent); }
+.notes code, .notes .ilm {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  background: rgba(31, 29, 26, 0.05);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.notes .math {
+  display: block;
+  background: transparent;
+  border: none;
+  padding: 10px 0;
+  margin: 14px 0;
+  font-size: 1.05em;
+  line-height: 1.7;
+  white-space: normal;
+  overflow-x: auto;
+}
+
+/* Optional: keep MathJax nicely sized */
+mjx-container {
+  font-size: 1.05em !important;
+}
+
+footer {
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-faint);
+  padding: 8px 0 44px 0;
+}
+footer .dash { color: var(--rule); margin: 0 6px; }
+
+/* ============== Tablet ============== */
+@media (max-width: 960px) {
+  body { font-size: 17px; }
+  h1 { font-size: 46px; }
+  .viz-grid {
+    grid-template-columns: minmax(0, 1fr) 264px;
+    gap: 20px;
+    padding: 0 22px;
+  }
+  .viz-frame { min-height: 380px; }
+  .lede { padding: 48px 22px 20px 22px; }
+  .notes { padding: 0 22px; }
+}
+
+/* ============== Mobile ============== */
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  h1 { font-size: 34px; }
+  .lede { padding: 36px 20px 12px 20px; }
+  .lede p { font-size: 17px; }
+  .viz-grid {
+    grid-template-columns: 1fr;
+    padding: 0 18px;
+    gap: 16px;
+  }
+  .viz-frame { aspect-ratio: 1 / 1; min-height: 320px; }
+  .sidebar { gap: 12px; }
+  .sparkline-wrap, .control-group { padding: 12px 14px; }
+  .slider-row {
+    min-height: 44px;
+    padding: 4px 0;
+    margin-bottom: 6px;
+  }
+  .slider-row input[type="range"] { height: 5px; margin: 14px 0 4px 0; }
+  .slider-row input[type="range"]::-webkit-slider-thumb { width: 20px; height: 20px; }
+  .slider-row input[type="range"]::-moz-range-thumb     { width: 20px; height: 20px; }
+  .buttons { gap: 8px; }
+  .buttons button {
+    flex: 1 1 100%;
+    padding: 14px 12px;
+    font-size: 13px;
+    min-height: 48px;
+  }
+  .seg-control button { padding: 10px 4px; min-height: 40px; }
+  .kbd-hint { display: none; }
+  .notes { padding: 0 20px; }
+  .notes .math { font-size: 12px; padding: 10px 12px; }
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']]
+    },
+    chtml: {
+      scale: 1.02
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<header class="lede">
+  <div class="eyebrow">An Explorable · Adaptive Social Dynamics</div>
+  <h1>Polarized by Design</h1>
+  <p>Two opinions — <em style="color:var(--F); font-style: normal;">fake-believers</em> and <em style="color:var(--D); font-style: normal;">debunkers</em> — spread through a network of fixed friendships. With every exchange, ties between people who agree grow a little stronger; ties between people who disagree grow a little thinner. No friendship is ever cut. Yet, as you watch, the population separates into chambers, and the bonds across the divide quietly wither toward zero.</p>
+  <p>Press play and watch the warm threads thin.</p>
+</header>
+
+<main class="viz-grid">
+  <div class="viz-pane">
+    <div class="viz-frame">
+      <canvas id="viz" role="img" aria-label="A network of nodes representing two opinions, F (red) and D (blue), connected by edges of fixed topology. As the simulation runs, nodes that agree cluster together, while edges between disagreeing nodes fade toward invisibility, even though no edge is removed."></canvas>
+    </div>
+    <div class="caption">Same-opinion neighbors attract; disagreeing neighbors push apart. The edge wiring is frozen — only the weights, the colors, and the positions evolve.</div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--F)"></span>Forwarder (F)</span>
+      <span><span class="swatch" style="background:var(--D)"></span>Debunker (D)</span>
+      <span><span class="bar" style="background:var(--bridge)"></span>cross-camp edge</span>
+      <span><span class="bar" style="background:var(--rule)"></span>same-camp edge</span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sparkline-wrap">
+      <div class="meta">
+        <span>Polarization &nbsp;<span class="sym">P(t)</span></span>
+        <span class="val" id="p-val">0.00</span>
+      </div>
+      <svg id="sparkline" viewBox="0 0 300 72" preserveAspectRatio="none">
+        <line x1="0" y1="36" x2="300" y2="36" stroke="var(--rule)" stroke-dasharray="2 3" stroke-width="1"/>
+        <line x1="0" y1="0" x2="300" y2="0" stroke="var(--rule)" stroke-width="0.5" opacity="0.5"/>
+        <line x1="0" y1="72" x2="300" y2="72" stroke="var(--rule)" stroke-width="0.5" opacity="0.5"/>
+        <path id="spark-path" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linejoin="round"/>
+      </svg>
+      <div class="sparkline-foot">
+        <span>t = <span id="t-val">0</span></span>
+        <span>last 200 ticks</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h3><span>Dynamics</span><span class="hint">live</span></h3>
+      <div class="slider-row">
+        <label for="ctrl-S">Stubbornness <span class="sym">S</span></label>
+        <span class="value" id="val-S">5</span>
+        <input type="range" id="ctrl-S" min="1" max="100" value="5" step="1">
+      </div>
+      <div class="slider-row">
+        <label for="ctrl-a">Weight step <span class="sym">a</span></label>
+        <span class="value" id="val-a">0.05</span>
+        <input type="range" id="ctrl-a" min="0.01" max="0.50" value="0.05" step="0.01">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h3><span>Initial conditions</span><span class="hint">applies on reset</span></h3>
+      <div class="slider-row locked">
+        <label for="ctrl-w0">Initial weight <span class="sym">w<sub style="font-size:0.7em;">0</sub></span></label>
+        <span class="value" id="val-w0">0.50</span>
+        <input type="range" id="ctrl-w0" min="0.05" max="1" value="0.5" step="0.05">
+      </div>
+      <div class="slider-row locked">
+        <label for="ctrl-pD">D fraction <span class="sym">p<sub style="font-size:0.7em;">D</sub></span></label>
+        <span class="value" id="val-pD">0.50</span>
+        <input type="range" id="ctrl-pD" min="0.05" max="0.95" value="0.5" step="0.05">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h3><span>Topology</span><span class="hint">applies on new graph</span></h3>
+      <div class="slider-row locked">
+        <label for="ctrl-N">Nodes <span class="sym">N</span></label>
+        <span class="value" id="val-N">120</span>
+        <input type="range" id="ctrl-N" min="30" max="250" value="120" step="10">
+      </div>
+      <div class="slider-row locked">
+        <label for="ctrl-k">Mean degree <span class="sym">⟨k⟩</span></label>
+        <span class="value" id="val-k">8</span>
+        <input type="range" id="ctrl-k" min="2" max="16" value="8" step="2">
+      </div>
+      <div class="seg-control" id="graph-type" role="radiogroup" aria-label="Graph type">
+        <button class="active" data-type="WS" aria-pressed="true">Watts–Strogatz</button>
+        <button data-type="ER" aria-pressed="false">Erdős–Rényi</button>
+        <button data-type="BA" aria-pressed="false">Barabási–Albert</button>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="btn-play" class="primary">Pause</button>
+      <button id="btn-reset">Reset</button>
+      <button id="btn-newgraph">New graph</button>
+    </div>
+    <div class="kbd-hint"><kbd>space</kbd> play / pause &nbsp; <kbd>r</kbd> reset &nbsp; <kbd>n</kbd> new graph</div>
+  </aside>
+</main>
+
+<section class="notes">
+  <details>
+    <summary>The model in one breath</summary>
+    <p>Every node carries one of two opinions — <em>F</em> (forwarder) or <em>D</em> (debunker). At each tick, a node looks at its <em>disagreeing</em> neighbors only. Each one exerts a pull proportional to the strength of their tie \(w_{ij}\), scaled by a global stubbornness \(S\):
+    <div class="math">
+      \[
+      p_{\mathrm{flip}}(i,t)
+      =
+      1-
+      \prod_{j:\,x_j(t)\neq x_i(t)}
+      \left(1-\frac{w_{ij}(t)}{S}\right)
+      \]
+      </div>
+    <p>Every node draws one uniform coin and flips with that probability. All flips are applied <em>simultaneously</em>. Then, with the new opinions in hand, every friendship is updated: if the two endpoints now agree, the weight grows by <code>a</code>; if they disagree, it shrinks by <code>a</code>. Weights are clipped to [0, 1]. The edges themselves never appear or disappear.</p>
+    <p>The polarization coefficient is the complement of the average cross-opinion weight:</p>
+    <div class="math">
+      \[
+      P(t)
+      =
+      1-\frac{1}{|E_{\mathrm{cross}}(t)|}
+      \sum_{(i,j)\in E_{\mathrm{cross}}(t)} w_{ij}(t),
+      \qquad
+      E_{\mathrm{cross}}(t)=\{(i,j)\in E:\,x_i(t)\neq x_j(t)\}.
+      \]
+      </div>
+    <p>It climbs from near zero (the camps are still well-connected) toward one (the bonds across the divide have withered).</p>
+  </details>
+
+  <details>
+    <summary>What the layout is telling you</summary>
+    <p>The spatial arrangement of nodes is driven by their <em>opinions</em>, not by edge weights. Two nodes that share an opinion are pulled close; two nodes that disagree are pushed apart. This is a deliberate choice: it makes the chambers visible to your eye as they form.</p>
+    <p>The wiring of the network, however, never changes. Every edge that exists at <em>t = 0</em> still exists at <em>t = ∞</em>. What you see fading toward invisibility are the <em>weights</em> of cross-camp edges — the ties that span the divide and have grown too thin to carry persuasion across.</p>
+    <p>If you were to flatten every edge to the same neutral color, you would see exactly the same topology you started with — just rearranged in space. <em>Polarization here is not a graph that broke. It is a graph whose bridges went silent.</em></p>
+  </details>
+
+  <details>
+    <summary>Parameter intuition</summary>
+    <p><em>Low S</em> (≈ 2–8): everyone is easily persuaded. A small minority can be absorbed by the majority before the cross-camp edges erode. The system often collapses to <em>consensus</em>, and <em>P(t)</em> reaches 1 trivially because there are no cross-opinion edges left.</p>
+    <p><em>High S</em> (≈ 50–100): everyone is stubborn. Few opinions flip; the camps stay mixed in space and the bridges erode slowly. <em>P(t)</em> climbs but the visual chambers form lazily.</p>
+    <p><em>Mid S</em> with moderate <em>a</em> (≈ <em>S</em>&nbsp;=&nbsp;5–20, <em>a</em>&nbsp;=&nbsp;0.03–0.08): the interesting regime. Persuasion happens at the edges of clusters, the surviving cross-camp ties decay before they can re-strengthen, and the two chambers separate visibly.</p>
+    <p><em>Larger a</em> accelerates everything: the race finishes faster, more often in favor of fragmentation. <em>Larger N</em> makes the final picture cleaner but slower to settle. <em>Watts–Strogatz</em> with its long-range shortcuts gives the most striking chamber-formation; <em>Erdős–Rényi</em> mixes more thoroughly; <em>Barabási–Albert</em> creates hubs that anchor whichever opinion they start with.</p>
+  </details>
+</section>
+
+<footer><span class="dash">—</span>Polarization Explorable<span class="dash">—</span><br>por Ricardo Pérez</footer>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function () {
+'use strict';
+
+// ============================================================
+//  PRNG (Mulberry32) — seeded, reproducible
+// ============================================================
+function mulberry32(seed) {
+  var s = seed >>> 0;
+  return function () {
+    s = (s + 0x6D2B79F5) >>> 0;
+    var t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ============================================================
+//  Graph generators
+//   - Edges are { i, j, weight } with i < j (canonical orientation)
+//   - i and j are persistent node indices; do NOT name them
+//     source/target, as d3-force will mutate those fields.
+// ============================================================
+function keyOf(a, b) { return a < b ? a + '-' + b : b + '-' + a; }
+
+function makeWS(n, k, p_ws, rng) {
+  if (k % 2 !== 0) k += 1;
+  k = Math.min(k, n - 2);
+  var edges = [];
+  var edgeSet = new Set();
+  // ring lattice
+  for (var i = 0; i < n; i++) {
+    for (var jj = 1; jj <= k / 2; jj++) {
+      var t = (i + jj) % n;
+      var key = keyOf(i, t);
+      if (!edgeSet.has(key)) {
+        edgeSet.add(key);
+        edges.push({ i: Math.min(i, t), j: Math.max(i, t), weight: 0.5 });
+      }
+    }
+  }
+  // rewire
+  for (var idx = 0; idx < edges.length; idx++) {
+    if (rng() < p_ws) {
+      var e = edges[idx];
+      var s = e.i;
+      var oldKey = keyOf(e.i, e.j);
+      var attempts = 0;
+      while (attempts < 60) {
+        var newT = Math.floor(rng() * n);
+        if (newT !== s) {
+          var newKey = keyOf(s, newT);
+          if (!edgeSet.has(newKey)) {
+            edgeSet.delete(oldKey);
+            edgeSet.add(newKey);
+            e.i = Math.min(s, newT);
+            e.j = Math.max(s, newT);
+            break;
+          }
+        }
+        attempts++;
+      }
+    }
+  }
+  return edges;
+}
+
+function makeER(n, k, rng) {
+  var p = k / (n - 1);
+  var edges = [];
+  for (var i = 0; i < n; i++) {
+    for (var j = i + 1; j < n; j++) {
+      if (rng() < p) edges.push({ i: i, j: j, weight: 0.5 });
+    }
+  }
+  return edges;
+}
+
+function makeBA(n, k, rng) {
+  var m = Math.max(1, Math.floor(k / 2));
+  var edges = [];
+  var degree = new Array(n).fill(0);
+  var edgeSet = new Set();
+  var init = Math.min(m + 1, n);
+  // initial seed: complete subgraph on init nodes
+  for (var i = 0; i < init; i++) {
+    for (var j = i + 1; j < init; j++) {
+      var key = keyOf(i, j);
+      if (!edgeSet.has(key)) {
+        edgeSet.add(key);
+        edges.push({ i: i, j: j, weight: 0.5 });
+        degree[i]++; degree[j]++;
+      }
+    }
+  }
+  // preferential attachment
+  for (var v = init; v < n; v++) {
+    var picked = new Set();
+    var attempts = 0;
+    while (picked.size < m && attempts < 400) {
+      attempts++;
+      var totalDeg = 0;
+      for (var u = 0; u < v; u++) totalDeg += degree[u];
+      if (totalDeg === 0) {
+        picked.add(Math.floor(rng() * v));
+        continue;
+      }
+      var r = rng() * totalDeg;
+      var chosen = v - 1;
+      for (var u2 = 0; u2 < v; u2++) {
+        r -= degree[u2];
+        if (r <= 0) { chosen = u2; break; }
+      }
+      if (!picked.has(chosen)) picked.add(chosen);
+    }
+    picked.forEach(function (t) {
+      var key2 = keyOf(v, t);
+      if (!edgeSet.has(key2)) {
+        edgeSet.add(key2);
+        edges.push({ i: Math.min(v, t), j: Math.max(v, t), weight: 0.5 });
+        degree[v]++; degree[t]++;
+      }
+    });
+  }
+  return edges;
+}
+
+function buildModel(kind, n, k, seed) {
+  var rng = mulberry32(seed);
+  var edges;
+  if (kind === 'WS')      edges = makeWS(n, k, 0.1, rng);
+  else if (kind === 'ER') edges = makeER(n, k, rng);
+  else                    edges = makeBA(n, k, rng);
+  var adj = [];
+  for (var i = 0; i < n; i++) adj.push([]);
+  for (var e = 0; e < edges.length; e++) {
+    adj[edges[e].i].push(edges[e]);
+    adj[edges[e].j].push(edges[e]);
+  }
+  return { n: n, edges: edges, adj: adj };
+}
+
+function initialiseState(n, pD, rng) {
+  var state = new Array(n);
+  for (var i = 0; i < n; i++) state[i] = rng() < pD ? 1 : 0;  // 1 = D, 0 = F
+  return state;
+}
+
+function resetWeights(model, w0) {
+  for (var e = 0; e < model.edges.length; e++) model.edges[e].weight = w0;
+}
+
+// ============================================================
+//  Dynamics — synchronous opinion update, then weight update
+// ============================================================
+function stepOpinions(model, state, S, rng) {
+  var n = model.n;
+  var newState = new Array(n);
+  for (var i = 0; i < n; i++) newState[i] = state[i];
+  for (var i2 = 0; i2 < n; i2++) {
+    var xi = state[i2];
+    var prod = 1;
+    var hasDisagree = false;
+    var nbrs = model.adj[i2];
+    for (var ni = 0; ni < nbrs.length; ni++) {
+      var e = nbrs[ni];
+      var jIdx = e.i === i2 ? e.j : e.i;
+      if (state[jIdx] !== xi) {
+        prod *= (1 - e.weight / S);
+        hasDisagree = true;
+      }
+    }
+    var p_flip = hasDisagree ? (1 - prod) : 0;
+    if (rng() < p_flip) newState[i2] = 1 - xi;
+  }
+  return newState;
+}
+
+function stepWeights(model, newState, a) {
+  for (var e = 0; e < model.edges.length; e++) {
+    var ed = model.edges[e];
+    var delta = newState[ed.i] === newState[ed.j] ? a : -a;
+    var w = ed.weight + delta;
+    if (w < 0) w = 0; else if (w > 1) w = 1;
+    ed.weight = w;
+  }
+}
+
+function polarization(model, state) {
+  var sum = 0, count = 0;
+  for (var e = 0; e < model.edges.length; e++) {
+    var ed = model.edges[e];
+    if (state[ed.i] !== state[ed.j]) {
+      sum += ed.weight;
+      count++;
+    }
+  }
+  if (count === 0) return 1;
+  return 1 - sum / count;
+}
+
+// ============================================================
+//  Runtime state
+// ============================================================
+var MAX_HIST       = 200;
+var STEP_INTERVAL  = 110;  // ms between model ticks
+var F_COLOR        = '#b8392f';
+var D_COLOR        = '#2a5a8c';
+var RULE_RGB       = '170, 152, 110';   // muted desat — same-camp edges
+var BRIDGE_RGB     = '214, 139, 34';    // warm amber  — cross-camp edges
+var BG_COLOR       = '#eee2c6';
+
+var params = {
+  S: 5, a: 0.05,
+  w0: 0.5, pD: 0.5,
+  N: 120, k: 8,
+  kind: 'WS'
+};
+var topologySeed = 0xC0FFEE;
+var stateSeed    = 0xBEEF42;
+var runSeed      = 0xA5A5A5;
+
+var model = null;
+var state = null;
+var runRng = null;
+var nodes = [];
+var links = [];
+var sim   = null;
+var pHistory = [];
+var t = 0;
+var running = true;
+var cssW = 600, cssH = 540;
+var lastStepTime = 0;
+var L_SHORT = 18, L_LONG = 90;
+
+var canvas    = document.getElementById('viz');
+var ctx       = canvas.getContext('2d');
+var sparkPath = document.getElementById('spark-path');
+var pValEl    = document.getElementById('p-val');
+var tValEl    = document.getElementById('t-val');
+
+// ============================================================
+//  Layout — opinion-driven, NOT weight-driven
+// ============================================================
+function recomputeLinkDistances() {
+  var minDim = Math.min(cssW, cssH);
+  L_SHORT = Math.max(12, minDim * 0.045);
+  L_LONG  = Math.max(50, minDim * 0.20);
+}
+
+function linkDistance(l) {
+  var si = (typeof l.source === 'object') ? l.source.id : l.source;
+  var ti = (typeof l.target === 'object') ? l.target.id : l.target;
+  return state[si] === state[ti] ? L_SHORT : L_LONG;
+}
+
+function buildLayout() {
+  recomputeLinkDistances();
+  var cx = cssW / 2, cy = cssH / 2;
+  var initRng = mulberry32(topologySeed ^ 0xDEADBEEF);
+
+  nodes = new Array(model.n);
+  for (var i = 0; i < model.n; i++) {
+    var ang = (i / model.n) * Math.PI * 2;
+    var rad = Math.min(cssW, cssH) * 0.28;
+    nodes[i] = {
+      id: i,
+      x: cx + Math.cos(ang) * rad + (initRng() - 0.5) * 8,
+      y: cy + Math.sin(ang) * rad + (initRng() - 0.5) * 8,
+      vx: 0, vy: 0
+    };
+  }
+  links = model.edges.map(function (e) {
+    return { source: e.i, target: e.j, e: e };
+  });
+
+  if (sim) sim.stop();
+  sim = d3.forceSimulation(nodes)
+    .force('link',
+      d3.forceLink(links)
+        .id(function (d) { return d.id; })
+        .distance(linkDistance)
+        .strength(0.6))
+    .force('charge', d3.forceManyBody().strength(-30).distanceMax(Math.min(cssW, cssH) * 0.6))
+    .force('x', d3.forceX(cx).strength(0.04))
+    .force('y', d3.forceY(cy).strength(0.04))
+    .velocityDecay(0.5)
+    .alphaTarget(0.3)
+    .alpha(1.0);
+}
+
+function relayoutOnly() {
+  // reuse existing nodes/links/sim; just nudge positions and re-init link force
+  var cx = cssW / 2, cy = cssH / 2;
+  var rng2 = mulberry32((stateSeed ^ runSeed) >>> 0);
+  for (var i = 0; i < nodes.length; i++) {
+    var ang = (i / nodes.length) * Math.PI * 2;
+    var rad = Math.min(cssW, cssH) * 0.28;
+    nodes[i].x = cx + Math.cos(ang) * rad + (rng2() - 0.5) * 8;
+    nodes[i].y = cy + Math.sin(ang) * rad + (rng2() - 0.5) * 8;
+    nodes[i].vx = 0; nodes[i].vy = 0;
+  }
+  recomputeLinkDistances();
+  sim.force('x').x(cx);
+  sim.force('y').y(cy);
+  sim.force('link').initialize(nodes, Math.random);
+  sim.alpha(1.0).restart();
+}
+
+// ============================================================
+//  Init / reset / new graph
+// ============================================================
+function rebuildAll() {
+  model  = buildModel(params.kind, params.N, params.k, topologySeed);
+  var sR = mulberry32((stateSeed ^ runSeed) >>> 0);
+  state  = initialiseState(model.n, params.pD, sR);
+  resetWeights(model, params.w0);
+  runRng = mulberry32(runSeed);
+  pHistory = [];
+  t = 0;
+  pHistory.push(polarization(model, state));
+  buildLayout();
+}
+
+function resetRun() {
+  var sR = mulberry32((stateSeed ^ runSeed) >>> 0);
+  state  = initialiseState(model.n, params.pD, sR);
+  resetWeights(model, params.w0);
+  runRng = mulberry32(runSeed);
+  pHistory = [];
+  t = 0;
+  pHistory.push(polarization(model, state));
+  relayoutOnly();
+}
+
+function pushP(p) {
+  pHistory.push(p);
+  if (pHistory.length > MAX_HIST) pHistory.shift();
+}
+
+// ============================================================
+//  Sparkline
+// ============================================================
+function updateSparkline() {
+  var W = 300, H = 72;
+  if (pHistory.length === 0) {
+    sparkPath.setAttribute('d', '');
+    return;
+  }
+  var d = '';
+  for (var i = 0; i < pHistory.length; i++) {
+    var x = (i / Math.max(MAX_HIST - 1, 1)) * W;
+    var y = H - pHistory[i] * H;
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+  }
+  sparkPath.setAttribute('d', d);
+  pValEl.textContent = pHistory[pHistory.length - 1].toFixed(2);
+  tValEl.textContent = String(t);
+}
+
+// ============================================================
+//  Render — Canvas, DPR-aware
+// ============================================================
+function render() {
+  ctx.fillStyle = BG_COLOR;
+  ctx.fillRect(0, 0, cssW, cssH);
+
+  // edges
+  for (var i = 0; i < links.length; i++) {
+    var l = links[i];
+    var s = l.source, t2 = l.target;
+    if (typeof s !== 'object' || typeof t2 !== 'object') continue;
+    var same = state[s.id] === state[t2.id];
+    var w = l.e.weight;
+    var opacity = 0.12 + 0.70 * w;
+    var width   = 0.4  + 2.0  * w;
+    ctx.strokeStyle = 'rgba(' + (same ? RULE_RGB : BRIDGE_RGB) + ',' + opacity.toFixed(3) + ')';
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(t2.x, t2.y);
+    ctx.stroke();
+  }
+
+  // nodes
+  var R = Math.max(2.8, Math.min(7, 78 / Math.sqrt(model.n)));
+  for (var n = 0; n < nodes.length; n++) {
+    var node = nodes[n];
+    ctx.fillStyle = state[node.id] === 1 ? D_COLOR : F_COLOR;
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, R, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = BG_COLOR;
+    ctx.stroke();
+  }
+}
+
+// ============================================================
+//  Main loop — model step is paced, render is rAF
+// ============================================================
+function loop(now) {
+  if (running && now - lastStepTime >= STEP_INTERVAL) {
+    var newState = stepOpinions(model, state, params.S, runRng);
+    stepWeights(model, newState, params.a);
+    state = newState;
+    t++;
+    pushP(polarization(model, state));
+    updateSparkline();
+    sim.force('link').initialize(nodes, Math.random);
+    sim.alpha(0.5).restart();
+    lastStepTime = now;
+  }
+  render();
+  requestAnimationFrame(loop);
+}
+
+// ============================================================
+//  Resize
+// ============================================================
+function resizeCanvas() {
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return;
+  cssW = rect.width;
+  cssH = rect.height;
+  canvas.width  = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (sim) {
+    recomputeLinkDistances();
+    sim.force('x').x(cssW / 2);
+    sim.force('y').y(cssH / 2);
+    sim.force('charge').distanceMax(Math.min(cssW, cssH) * 0.6);
+    sim.force('link').initialize(nodes, Math.random);
+    sim.alpha(0.3).restart();
+  }
+}
+
+// ============================================================
+//  UI bindings
+// ============================================================
+function fmtInt(v) { return String(Math.round(v)); }
+function fmt2(v)   { return v.toFixed(2); }
+function fmtS(v)   { return Number.isInteger(v) ? String(v) : v.toFixed(1); }
+
+function bindSlider(id, key, valId, fmt) {
+  var inp = document.getElementById(id);
+  var lbl = document.getElementById(valId);
+  function refresh() {
+    var v = parseFloat(inp.value);
+    params[key] = v;
+    lbl.textContent = fmt(v);
+  }
+  inp.addEventListener('input', refresh);
+  refresh();
+}
+
+bindSlider('ctrl-S',  'S',  'val-S',  fmtS);
+bindSlider('ctrl-a',  'a',  'val-a',  fmt2);
+bindSlider('ctrl-w0', 'w0', 'val-w0', fmt2);
+bindSlider('ctrl-pD', 'pD', 'val-pD', fmt2);
+bindSlider('ctrl-N',  'N',  'val-N',  fmtInt);
+bindSlider('ctrl-k',  'k',  'val-k',  fmtInt);
+
+var segButtons = document.querySelectorAll('#graph-type button');
+segButtons.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    segButtons.forEach(function (b) {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+    params.kind = btn.dataset.type;
+  });
+});
+
+var playBtn = document.getElementById('btn-play');
+playBtn.addEventListener('click', function () {
+  running = !running;
+  playBtn.textContent = running ? 'Pause' : 'Play';
+  playBtn.classList.toggle('primary', running);
+  lastStepTime = performance.now();
+});
+
+document.getElementById('btn-reset').addEventListener('click', function () {
+  runSeed = (Math.random() * 0x7FFFFFFF) | 0;
+  resetRun();
+  updateSparkline();
+});
+
+document.getElementById('btn-newgraph').addEventListener('click', function () {
+  topologySeed = (Math.random() * 0x7FFFFFFF) | 0;
+  runSeed      = (Math.random() * 0x7FFFFFFF) | 0;
+  rebuildAll();
+  updateSparkline();
+});
+
+document.addEventListener('keydown', function (e) {
+  if (e.target.matches('input, textarea, button')) return;
+  if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+  else if (e.key === 'r' || e.key === 'R') { document.getElementById('btn-reset').click(); }
+  else if (e.key === 'n' || e.key === 'N') { document.getElementById('btn-newgraph').click(); }
+});
+
+// ============================================================
+//  Boot
+// ============================================================
+if (typeof ResizeObserver !== 'undefined') {
+  new ResizeObserver(function () { resizeCanvas(); }).observe(document.querySelector('.viz-frame'));
+} else {
+  window.addEventListener('resize', resizeCanvas);
+}
+
+// Initial size + first build
+requestAnimationFrame(function () {
+  resizeCanvas();
+  rebuildAll();
+  updateSparkline();
+  lastStepTime = performance.now();
+  requestAnimationFrame(loop);
+});
+
+})();
+</script>
+</body>
+</html>
