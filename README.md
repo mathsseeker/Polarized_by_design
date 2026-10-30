@@ -1,9 +1,12 @@
 # Polarized by Design
 
-A numerical study of a minimal opinion-dynamics model in which competing
-persuasion and adaptive trust produce either **consensus** or
-**polarization** on synthetic social networks (Erdős–Rényi,
-Watts–Strogatz, Barabási–Albert).
+An **original** opinion-dynamics model: the stochastic flip rule, the
+Hebbian trust update, the polarization coefficient `P`, and the
+dimensionless control parameter `κ = a · S` are all designed from
+scratch for this project — not reused from the literature. The code
+tests, on synthetic social networks (Erdős–Rényi, Watts–Strogatz,
+Barabási–Albert), when competing persuasion and adaptive trust produce
+**consensus** vs **polarization**.
 
 The full model specification lives in
 [`docs/Rewriting_Toy_Model.pdf`](docs/Rewriting_Toy_Model.pdf); this README
