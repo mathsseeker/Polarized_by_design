@@ -1,0 +1,16 @@
+BISTABILITY EXPERIMENT — SUMMARY
+==================================================
+Max σ_runs over grid:  0.477
+Chosen cell:           a=0.0050,  S=12.70,  n_runs=50
+
+  mean P(T):                   0.437
+  std  P(T):                   0.469
+
+  Fraction of runs by bucket:
+    Mixed       (P < 0.4):      58.0%
+    Intermediate (0.4-0.7):      0.0%
+    Polarized   (P > 0.7):      42.0%
+
+VERDICT: distribution looks BIMODAL.
+  → Narrative HOLDS: same parameters, opposite fates.
+  → Safe to claim 'critical band where history matters'.

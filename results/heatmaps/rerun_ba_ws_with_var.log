@@ -1,0 +1,71 @@
+
+============================================================
+  topology=BA   ⟨k⟩=4
+============================================================
+[setup] BA graph  N=200  ⟨k⟩=4  pD=0.50  w0=0.50  graph_seed=42
+[setup] grid 25×25,  runs/cell=20,  T=1000
+        a ∈ [0.0050, 0.5000]   S ∈ [1.0, 100.0]  (log-spaced)
+[run]   parallel  workers=4
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+  [   15/625]    35.0s elapsed  ETA 1421.6s
+  [   30/625]    63.1s elapsed  ETA 1251.4s
+  [   45/625]    93.9s elapsed  ETA 1209.9s
+  [   60/625]   145.5s elapsed  ETA 1370.3s
+  [   75/625]   177.2s elapsed  ETA 1299.5s
+  [   90/625]   202.3s elapsed  ETA 1202.3s
+  [  105/625]   240.0s elapsed  ETA 1188.3s
+  [  120/625]   274.0s elapsed  ETA 1153.0s
+  [  135/625]   318.5s elapsed  ETA 1156.1s
+  [  150/625]   352.0s elapsed  ETA 1114.6s
+  [  165/625]   381.2s elapsed  ETA 1062.8s
+  [  180/625]   427.3s elapsed  ETA 1056.3s
+  [  195/625]   466.0s elapsed  ETA 1027.7s
+  [  210/625]   494.8s elapsed  ETA  977.8s
+  [  225/625]   524.2s elapsed  ETA  931.8s
+  [  240/625]   560.0s elapsed  ETA  898.3s
+  [  255/625]   581.4s elapsed  ETA  843.5s
+  [  270/625]   616.4s elapsed  ETA  810.4s
+  [  285/625]   660.0s elapsed  ETA  787.4s
+  [  300/625]   704.5s elapsed  ETA  763.2s
+  [  315/625]   735.3s elapsed  ETA  723.6s
+  [  330/625]   761.7s elapsed  ETA  680.9s
+  [  345/625]   785.7s elapsed  ETA  637.7s
+  [  360/625]   831.1s elapsed  ETA  611.8s
+  [  375/625]   882.9s elapsed  ETA  588.6s
+  [  390/625]   935.0s elapsed  ETA  563.4s
+  [  405/625]   994.3s elapsed  ETA  540.1s
+  [  420/625]  1050.9s elapsed  ETA  512.9s
+  [  435/625]  1107.4s elapsed  ETA  483.7s
+  [  450/625]  1171.7s elapsed  ETA  455.7s
+  [  465/625]  1222.5s elapsed  ETA  420.6s
+  [  480/625]  1282.0s elapsed  ETA  387.3s
+  [  495/625]  1342.3s elapsed  ETA  352.5s
+  [  510/625]  1404.4s elapsed  ETA  316.7s
+  [  525/625]  1788.3s elapsed  ETA  340.6s
+  [  540/625]  1834.7s elapsed  ETA  288.8s
+  [  555/625]  1865.9s elapsed  ETA  235.3s
+  [  570/625]  1890.5s elapsed  ETA  182.4s
+  [  585/625]  1922.3s elapsed  ETA  131.4s
+  [  600/625]  1982.6s elapsed  ETA   82.6s
+  [  615/625]  2033.5s elapsed  ETA   33.1s
+  [  625/625]  2050.3s elapsed  ETA    0.0s
+[done]  625 cells in 2050.3s  (3280.5 ms/cell)
+[save]  heatmap_k_variable_results_ba_k004.npz
+[save]  heatmap_k_variable_ba_k004.png
+
+============================================================
+  topology=BA   ⟨k⟩=8
+============================================================
+[setup] BA graph  N=200  ⟨k⟩=8  pD=0.50  w0=0.50  graph_seed=42
+[setup] grid 25×25,  runs/cell=20,  T=1000
+        a ∈ [0.0050, 0.5000]   S ∈ [1.0, 100.0]  (log-spaced)
+[run]   parallel  workers=4
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)

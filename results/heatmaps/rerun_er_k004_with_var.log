@@ -1,0 +1,61 @@
+
+============================================================
+  topology=ER   ⟨k⟩=4
+============================================================
+[setup] ER graph  N=200  ⟨k⟩=4  pD=0.50  w0=0.50  graph_seed=42
+[setup] grid 25×25,  runs/cell=20,  T=1000
+        a ∈ [0.0050, 0.5000]   S ∈ [1.0, 100.0]  (log-spaced)
+[run]   parallel  workers=4
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+/Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/polarized_vec.py:107: RuntimeWarning: divide by zero encountered in log1p
+  log_factor = np.where(disagree, np.log1p(-weights / S), 0.0)
+  [   15/625]    13.4s elapsed  ETA  546.2s
+  [   30/625]    22.9s elapsed  ETA  454.2s
+  [   45/625]    30.5s elapsed  ETA  393.3s
+  [   60/625]    37.9s elapsed  ETA  356.8s
+  [   75/625]    46.4s elapsed  ETA  340.4s
+  [   90/625]    53.1s elapsed  ETA  315.6s
+  [  105/625]    61.4s elapsed  ETA  303.9s
+  [  120/625]    68.2s elapsed  ETA  287.2s
+  [  135/625]    76.1s elapsed  ETA  276.1s
+  [  150/625]    83.3s elapsed  ETA  263.7s
+  [  165/625]    91.0s elapsed  ETA  253.8s
+  [  180/625]    98.0s elapsed  ETA  242.2s
+  [  195/625]   104.4s elapsed  ETA  230.2s
+  [  210/625]   111.9s elapsed  ETA  221.1s
+  [  225/625]   118.6s elapsed  ETA  210.9s
+  [  240/625]   128.3s elapsed  ETA  205.7s
+  [  255/625]   135.2s elapsed  ETA  196.2s
+  [  270/625]   142.3s elapsed  ETA  187.2s
+  [  285/625]   148.1s elapsed  ETA  176.7s
+  [  300/625]   155.9s elapsed  ETA  168.9s
+  [  315/625]   162.8s elapsed  ETA  160.3s
+  [  330/625]   170.0s elapsed  ETA  152.0s
+  [  345/625]   176.0s elapsed  ETA  142.8s
+  [  360/625]   184.0s elapsed  ETA  135.4s
+  [  375/625]   190.3s elapsed  ETA  126.9s
+  [  390/625]   197.2s elapsed  ETA  118.8s
+  [  405/625]   204.4s elapsed  ETA  111.0s
+  [  420/625]   212.3s elapsed  ETA  103.6s
+  [  435/625]   218.1s elapsed  ETA   95.3s
+  [  450/625]   227.1s elapsed  ETA   88.3s
+  [  465/625]   235.2s elapsed  ETA   80.9s
+  [  480/625]   242.4s elapsed  ETA   73.2s
+  [  495/625]   248.6s elapsed  ETA   65.3s
+  [  510/625]   256.3s elapsed  ETA   57.8s
+  [  525/625]   263.0s elapsed  ETA   50.1s
+  [  540/625]   271.0s elapsed  ETA   42.7s
+  [  555/625]   279.0s elapsed  ETA   35.2s
+  [  570/625]   287.4s elapsed  ETA   27.7s
+  [  585/625]   296.6s elapsed  ETA   20.3s
+  [  600/625]   304.0s elapsed  ETA   12.7s
+  [  615/625]   309.6s elapsed  ETA    5.0s
+  [  625/625]   312.4s elapsed  ETA    0.0s
+[done]  625 cells in 312.4s  (499.9 ms/cell)
+[save]  heatmap_k_variable_results_er_k004.npz
+[save]  heatmap_k_variable_er_k004.png

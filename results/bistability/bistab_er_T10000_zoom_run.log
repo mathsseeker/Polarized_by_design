@@ -1,0 +1,70 @@
+[setup] ER  N=200  <k>=4  pD=0.5  w0=0.5
+[setup] grid 30x30  runs/cell=40  T=10000  tail=0.2
+[setup] a ∈ [0.0050, 0.050]  S ∈ [10.0, 40.0]  (both log-spaced)
+[run]   parallel workers=4
+  [   22/900]   506.1s elapsed  ETA 20198.5s
+  [   44/900]   933.3s elapsed  ETA 18157.3s
+  [   66/900]  1397.8s elapsed  ETA 17662.9s
+  [   88/900]  1784.2s elapsed  ETA 16463.2s
+  [  110/900]  2239.5s elapsed  ETA 16083.7s
+  [  132/900]  2598.8s elapsed  ETA 15120.6s
+  [  154/900]  3020.0s elapsed  ETA 14629.4s
+  [  176/900]  3372.2s elapsed  ETA 13872.2s
+  [  198/900]  3792.7s elapsed  ETA 13446.9s
+  [  220/900]  4144.8s elapsed  ETA 12811.2s
+  [  242/900]  4565.1s elapsed  ETA 12412.6s
+  [  264/900]  4917.9s elapsed  ETA 11847.7s
+  [  286/900]  5338.6s elapsed  ETA 11461.2s
+  [  308/900]  5693.1s elapsed  ETA 10942.5s
+  [  330/900]  6111.9s elapsed  ETA 10556.8s
+  [  352/900]  6466.1s elapsed  ETA 10066.5s
+  [  374/900]  6884.1s elapsed  ETA 9681.9s
+  [  396/900]  7239.2s elapsed  ETA 9213.5s
+  [  418/900]  7662.4s elapsed  ETA 8835.6s
+  [  440/900]  8018.3s elapsed  ETA 8382.7s
+  [  462/900]  8435.9s elapsed  ETA 7997.7s
+  [  484/900]  8791.5s elapsed  ETA 7556.4s
+  [  506/900]  9206.3s elapsed  ETA 7168.5s
+  [  528/900]  9562.1s elapsed  ETA 6736.9s
+  [  550/900]  9976.4s elapsed  ETA 6348.6s
+  [  572/900]  10333.2s elapsed  ETA 5925.3s
+  [  594/900]  10746.4s elapsed  ETA 5536.0s
+  [  616/900]  11104.3s elapsed  ETA 5119.5s
+  [  638/900]  11516.5s elapsed  ETA 4729.3s
+  [  660/900]  11874.1s elapsed  ETA 4317.9s
+  [  682/900]  12285.4s elapsed  ETA 3927.0s
+  [  704/900]  12643.5s elapsed  ETA 3520.1s
+  [  726/900]  13054.1s elapsed  ETA 3128.7s
+  [  748/900]  13412.9s elapsed  ETA 2725.6s
+  [  770/900]  13822.8s elapsed  ETA 2333.7s
+  [  792/900]  14182.5s elapsed  ETA 1934.0s
+  [  814/900]  14591.7s elapsed  ETA 1541.6s
+  [  836/900]  14951.1s elapsed  ETA 1144.6s
+  [  858/900]  15359.6s elapsed  ETA  751.9s
+  [  880/900]  15719.8s elapsed  ETA  357.3s
+  [  900/900]  16064.3s elapsed  ETA    0.0s
+[done]  900 cells in 16064.4s  (17849.3 ms/cell)
+[save] bistab_er_T10000_zoom_results.npz
+[save] bistab_er_T10000_zoom_heatmaps.png
+[pick] auto-chosen bistable cell:  a=0.0050,  S=12.70,  σ_runs=0.477
+[save] bistab_er_T10000_zoom_broom.png
+[save] bistab_er_T10000_zoom_hist.png
+
+BISTABILITY EXPERIMENT — SUMMARY
+==================================================
+Max σ_runs over grid:  0.477
+Chosen cell:           a=0.0050,  S=12.70,  n_runs=50
+
+  mean P(T):                   0.437
+  std  P(T):                   0.469
+
+  Fraction of runs by bucket:
+    Mixed       (P < 0.4):      58.0%
+    Intermediate (0.4-0.7):      0.0%
+    Polarized   (P > 0.7):      42.0%
+
+VERDICT: distribution looks BIMODAL.
+  → Narrative HOLDS: same parameters, opposite fates.
+  → Safe to claim 'critical band where history matters'.
+
+[save] bistab_er_T10000_zoom_summary.txt

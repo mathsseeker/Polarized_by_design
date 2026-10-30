@@ -1,0 +1,67 @@
+[queue] Sun May 17 01:06:40 CEST 2026  Watching PID 82193 (heatmap_polarized.py) — will start sweep when it exits.
+[queue] Sun May 17 01:06:40 CEST 2026  PID 82193 done. Starting sweep now.
+[setup] graphs=('er', 'ws', 'ba')  ⟨k⟩=(4, 8, 16)
+[setup] N=80  pD=0.5  w0=0.5  T=200  runs/cell=8
+[setup] a: log-spaced 0.005–0.5  (15 values)
+[setup] S: log-spaced 1.0–100.0  (15 values)
+[setup] 2025 cells in total (9 sweeps × 225 cells)
+[run]   parallel workers=4
+  [   67/2025]    10.3s elapsed  ETA  302.0s
+  [  134/2025]    18.3s elapsed  ETA  258.2s
+  [  201/2025]    26.5s elapsed  ETA  240.4s
+  [  268/2025]    40.0s elapsed  ETA  262.2s
+  [  335/2025]    55.9s elapsed  ETA  282.0s
+  [  402/2025]    72.5s elapsed  ETA  292.9s
+  [  469/2025]    94.1s elapsed  ETA  312.3s
+  [  536/2025]   119.2s elapsed  ETA  331.0s
+  [  603/2025]   942.3s elapsed  ETA 2222.1s
+  [  670/2025]   982.0s elapsed  ETA 1985.9s
+  [  737/2025]   995.1s elapsed  ETA 1739.1s
+  [  804/2025]  1903.6s elapsed  ETA 2890.8s
+  [  871/2025]  1916.6s elapsed  ETA 2539.4s
+  [  938/2025]  1933.9s elapsed  ETA 2241.1s
+  [ 1005/2025]  1954.8s elapsed  ETA 1984.0s
+  [ 1072/2025]  1975.9s elapsed  ETA 1756.6s
+  [ 1139/2025]  2001.6s elapsed  ETA 1557.0s
+  [ 1206/2025]  2034.2s elapsed  ETA 1381.4s
+  [ 1273/2025]  2064.3s elapsed  ETA 1219.4s
+  [ 1340/2025]  2095.1s elapsed  ETA 1071.0s
+  [ 1407/2025]  2106.1s elapsed  ETA  925.1s
+  [ 1474/2025]  2114.9s elapsed  ETA  790.6s
+  [ 1541/2025]  2123.8s elapsed  ETA  667.1s
+  [ 1608/2025]  2136.3s elapsed  ETA  554.0s
+  [ 1675/2025]  2151.2s elapsed  ETA  449.5s
+  [ 1742/2025]  2166.8s elapsed  ETA  352.0s
+  [ 1809/2025]  2184.5s elapsed  ETA  260.8s
+  [ 1876/2025]  2212.7s elapsed  ETA  175.7s
+  [ 1943/2025]  2246.3s elapsed  ETA   94.8s
+  [ 2010/2025]  2275.4s elapsed  ETA   17.0s
+  [ 2025/2025]  2281.4s elapsed  ETA    0.0s
+[done]  2025 cells in 2281.5s (1126.7 ms/cell)
+[save]  universality_sweep.csv  (2025 rows)
+[save]  universality_collapse.png
+[save]  degree_scaling.png
+
+============================================================================
+  UNIVERSALITY TEST — summary
+============================================================================
+
+  Within-subplot collapse quality  (cross-topology spread of f_×)
+  ⟨k⟩       median bin-std     worst bin-std               verdict
+  4                  0.012             0.072                 TIGHT
+  8                  0.008             0.048                 TIGHT
+  16                 0.006             0.020                 TIGHT
+
+  Empirical κ_½ (κ at which the binned f_× has halved):
+  graph          ⟨k⟩=4       ⟨k⟩=8      ⟨k⟩=16      fitted α
+  ER               —           —           —         n/a   
+  WS               —           —           —         n/a   
+  BA               —           —           —         n/a   
+   (heuristic predicts κ_½ ∝ ⟨k⟩^-1, i.e. α = -1.000)
+
+  VERDICT:  κ_½ never crossed in the sweep — extend the κ range.
+
+  cells with NaN in f_× : 0
+  cells with NaN in C   : 0
+============================================================================
+[done] Sun May 17 01:44:44 CEST 2026

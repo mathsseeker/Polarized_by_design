@@ -1,0 +1,4 @@
+[setup] ER  N=200  <k>=4  pD=0.5  w0=0.5
+[setup] grid 30x30  runs/cell=40  T=10000  tail=0.2
+[setup] a ∈ [0.0050, 0.500]  S ∈ [1.0, 100.0]  (both log-spaced)
+[run]   parallel workers=4

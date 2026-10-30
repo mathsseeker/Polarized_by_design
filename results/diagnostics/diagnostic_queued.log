@@ -1,0 +1,46 @@
+[queue] Sun May 17 17:52:45 CEST 2026  Watching PID 89510 (heatmap chain) — will run diagnostic when it exits.
+[queue] Sun May 17 17:57:45 CEST 2026  PID 89510 done. Running diagnostic_analysis.py now.
+[load] /Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/collapse_test.csv
+[load] shape = (225, 12)
+[load] columns = ['a', 'S', 'kappa', 'n_runs', 'P_mean', 'P_std', 'f_E_cross_mean', 'f_E_cross_std', 'consensus_mean', 'consensus_std', 'w_x_density_mean', 'w_x_density_std']
+[load] head:
+       a         S     kappa  n_runs    P_mean     P_std  f_E_cross_mean  f_E_cross_std  consensus_mean  consensus_std  w_x_density_mean  w_x_density_std
+0  0.005  1.000000  0.005000       8  0.642985  0.006316        0.563672       0.011565        0.046875       0.031161          0.201250         0.005889
+1  0.005  1.389495  0.006947       8  0.592818  0.005772        0.535937       0.022097        0.053125       0.045193          0.218211         0.009203
+2  0.005  1.930698  0.009653       8  0.540444  0.006258        0.509375       0.025931        0.131250       0.103294          0.234059         0.011615
+3  0.005  2.682696  0.013413       8  0.475513  0.010896        0.497656       0.034100        0.103125       0.110549          0.260980         0.018209
+4  0.005  3.727594  0.018638       8  0.416575  0.011418        0.454297       0.027647        0.134375       0.121697          0.264898         0.014128
+[load] unique (a,S) cells = 225; total rows = 225
+[load] CSV already aggregated: one row per (a,S) cell with mean/std fields.
+
+[bins] log10(kappa) edges: [-2.301, -1.901, -1.501, -1.101, -0.701, -0.301, 0.099, 0.499, 0.899, 1.299, 1.699]
+[bins] bin 0: log10(kappa) in [-2.301, -1.901], n_cells=6
+[bins] bin 1: log10(kappa) in [-1.901, -1.501], n_cells=15
+[bins] bin 2: log10(kappa) in [-1.501, -1.101], n_cells=24
+[bins] bin 3: log10(kappa) in [-1.101, -0.701], n_cells=33
+[bins] bin 4: log10(kappa) in [-0.701, -0.301], n_cells=42
+[bins] bin 5: log10(kappa) in [-0.301, 0.099], n_cells=27
+[bins] bin 6: log10(kappa) in [0.099, 0.499], n_cells=33
+[bins] bin 7: log10(kappa) in [0.499, 0.899], n_cells=24
+[bins] bin 8: log10(kappa) in [0.899, 1.299], n_cells=15
+[bins] bin 9: log10(kappa) in [1.299, 1.699], n_cells=6
+
+[obs] P(T) (P_mean)
+  vs log10(a):     case=C  n_sig=5/10  |beta1|_med=0.125  excess=21.31
+  vs log10(a/S):   case=C  n_sig=6/10  |beta1|_med=0.0579  excess=21.31
+
+[obs] f_E_cross (f_E_cross_mean)
+  vs log10(a):     case=B  n_sig=6/10  |beta1|_med=0.0589  excess=2.75
+  vs log10(a/S):   case=B  n_sig=5/10  |beta1|_med=0.0399  excess=2.75
+
+[obs] consensus (consensus_mean)
+  vs log10(a):     case=C  n_sig=4/10  |beta1|_med=0.0563  excess=1.67
+  vs log10(a/S):   case=C  n_sig=4/10  |beta1|_med=0.0469  excess=1.67
+
+[obs] w_x_density (w_x_density_mean)
+  vs log10(a):     case=C  n_sig=4/10  |beta1|_med=0.00916  excess=7.65
+  vs log10(a/S):   case=C  n_sig=4/10  |beta1|_med=0.00327  excess=7.65
+[write] /Users/ricardoperez/Desktop/IE/2Q2/LAB/PROJECT_MATH_MODELING/diagnostic_summary.md
+
+[done] diagnostic complete.
+[done] Sun May 17 17:58:03 CEST 2026

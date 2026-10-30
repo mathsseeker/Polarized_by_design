@@ -1,0 +1,20 @@
+BISTABILITY EXPERIMENT — SUMMARY
+==================================================
+Max σ_runs over grid:  nan
+Chosen cell:           a=0.0509,  S=16.16,  n_runs=50
+
+  mean P(T):                   1.000
+  std  P(T):                   0.000
+
+  Fraction of runs by bucket:
+    Mixed       (P < 0.4):       0.0%
+    Intermediate (0.4-0.7):      0.0%
+    Polarized   (P > 0.7):     100.0%
+
+VERDICT: distribution does NOT look clearly bimodal.
+  → Narrative may not hold at this cell. Possible reasons:
+      • n_runs too low to resolve the modes — try --runs 80
+      • Picked the wrong cell — inspect the σ_runs heatmap
+        and try --cell a,S with values right on the ridge
+      • The model is genuinely unimodal here (chaotic, not bistable)
+        — check σ_time at the same cell.

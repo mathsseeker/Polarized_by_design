@@ -1,0 +1,26 @@
+# ─── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ─── OS / editor ───────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# ─── Local run artefacts (not meant for the repo) ──────────────────────────
+# Keep the curated outputs in results/; ignore stale sweep backups and
+# background-queue bookkeeping.
+*.npz.bak
+queue.pid
+queue.log
+queue_zoom.pid
+queue_zoom.log
+
+# Empty placeholder directory kept around by earlier runs.
+figs/
